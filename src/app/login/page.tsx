@@ -1,3 +1,26 @@
+// // src/app/login/page.tsx
+// "use client"
+// // import { authenticate } from "@/lib/actions"
+// // import { useFormState } from "react-dom"
+
+// export default function Page() {
+//   	// 추후에 추가될 로그인 메소드
+//     // const [errorMsg, dispatch] = useFormState(authenticate, undefined)
+//     return (
+//       <div>
+//         <h1>로그인 페이지</h1>
+//         <form className="flex flex-col"> {/*action={dispatch}*/}  
+//             <input className="bg-blue-300 text-black" name="username"></input>
+//             <input className="bg-yellow-300 text-black" name="password" type="password"></input>
+//             <button>
+//                 로그인
+//             </button>
+//  			{/* 추후에 추가될 에러 메세지
+//             <p>{errorMsg}</p> */}
+//         </form>
+//       </div>
+//     )
+//   }
 "use client";
 import React from 'react';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
@@ -16,10 +39,10 @@ const App: React.FC = () => {
       onFinish={onFinish}
     >
       <Form.Item
-        name="email"
-        rules={[{ required: true, message: 'Please input your email!' }]}
+        name="username"
+        rules={[{ required: true, message: 'Please input your Username!' }]}
       >
-        <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="email" />
+        <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
       </Form.Item>
       <Form.Item
         name="password"

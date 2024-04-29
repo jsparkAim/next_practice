@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import type { CascaderProps } from 'antd';
 import {
   AutoComplete,
@@ -13,7 +13,8 @@ import {
   Row,
   Select,
 } from 'antd';
-
+import RadioButton from '../../ui/join/RadioButton';
+import StartToEndDate from '../../ui/join/StartToEndDate';
 
 const { Option } = Select;
 
@@ -117,6 +118,17 @@ const App: React.FC = () => {
     }
   };
 
+  // 핸드폰번호 검증 로직
+  const valiedatPhoneNumber = (phoneNumberInput : any, value : any) => {
+    if (!value.startsWith("010")) { 
+      return Promise.reject(new Error(phoneNumberInput.message));
+    } else if (value.length !== 11) {
+      return Promise.reject(new Error(phoneNumberInput.message));
+    } else {
+      return Promise.resolve();
+    }
+  };
+
   const websiteOptions = autoCompleteResult.map((website) => ({
     label: website,
     value: website,
@@ -133,8 +145,40 @@ const App: React.FC = () => {
       scrollToFirstError
     >
       <Form.Item
+        name="company"
+        label="기업/부서"
+        rules={[{ required: true, message: 'Please input your nickname!', whitespace: true }]}
+      >
+        <Select placeholder="기업/부서 선택" style={{width : '49%', marginRight : '2%'}}>
+          <Option value="ai">에임메드</Option>
+          <Option value="hy">하이닉스</Option>
+          <Option value="bi">비아트리스</Option>
+          <Option value="hp">HPE</Option>
+        </Select>
+      </Form.Item>
+
+      <Form.Item
+        name="name"
+        label="이름"
+        tooltip="What do you want others to call you?"
+        rules={[{ required: true, message: 'Please input your nickname!', whitespace: true }]}
+      >
+        <Input />
+      </Form.Item>
+
+      <Form.Item
+        name="id"
+        label="아이디"
+        tooltip="What do you want others to call you?"
+        rules={[{ required: true, message: 'Please input your nickname!', whitespace: true }]}
+      >
+        <Input style={{width : '74%', marginRight : '5%'}} />
+        <Button type="primary">중복확인</Button>
+      </Form.Item>
+      
+      <Form.Item
         name="email"
-        label="E-mail"
+        label="이메일"
         rules={[
           {
             type: 'email',
@@ -151,7 +195,7 @@ const App: React.FC = () => {
 
       <Form.Item
         name="password"
-        label="Password"
+        label="비밀번호"
         rules={[
           {
             required: true,
@@ -163,9 +207,9 @@ const App: React.FC = () => {
         <Input.Password />
       </Form.Item>
 
-      <Form.Item
+      {/* <Form.Item
         name="confirm"
-        label="Confirm Password"
+        label="비밀번호 확인"
         dependencies={['password']}
         hasFeedback
         rules={[
@@ -184,37 +228,78 @@ const App: React.FC = () => {
         ]}
       >
         <Input.Password />
-      </Form.Item>
-
-      <Form.Item
-        name="nickname"
-        label="Nickname"
-        tooltip="What do you want others to call you?"
-        rules={[{ required: true, message: 'Please input your nickname!', whitespace: true }]}
-      >
-        <Input />
-      </Form.Item>
-
+      </Form.Item> */}
 
       <Form.Item
         name="phone"
-        label="Phone Number"
-        rules={[{ required: true, message: 'Please input your phone number!' }]}
+        label="휴대폰 번호"
+        rules={[
+          {
+            validator: valiedatPhoneNumber,
+            message: "올바른 전화번호 양식이 아닙니다.",
+          }
+       ]}
       >
-        <Input addonBefore={prefixSelector} style={{ width: '100%' }} />
+        <Input style={{ width: '100%' }}/>
+      </Form.Item>
+
+      <Form.Item
+        name="joinDate"
+        label="가입일"
+        rules={[{ required: true, message: '가입일을 선택해주세요' }]}
+      >
+        <StartToEndDate />
+      </Form.Item>
+
+      <Form.Item
+        name="usePeriod"
+        label="사용기간 설정"
+        rules={[{ required: true, message: '사용기간을 선택해주세요' }]}
+      >
+        <RadioButton />
+      </Form.Item>
+
+
+      <Form.Item
+        name="authority"
+        label="권한"
+        rules={[{ required: true, message: '권한을 선택해주세요' }]}
+      >
+        <Select placeholder="권한그룹구분 선택" style={{width : '49%', marginRight : '2%'}}>
+          <Option value="ai">에임메드</Option>
+          <Option value="hy">하이닉스</Option>
+          <Option value="bi">비아트리스</Option>
+          <Option value="hp">HPE</Option>
+        </Select>
+        <Select placeholder="권한 선택" style={{width : '49%'}}>
+          <Option value="sm">시스템마스터</Option>
+          <Option value="om">운영마스터</Option>
+          <Option value="cs">상담사</Option>
+          <Option value="wm">웹시스템마스터</Option>
+        </Select>
       </Form.Item>
     
 
       <Form.Item
-        name="gender"
-        label="Gender"
+        name="adminYn"
+        label="관리자 구분"
+        rules={[{ required: true, message: '관리자를 선택해주세요' }]}
+      >
+        <Select placeholder="관리자구분 선택">
+          <Option value="master">마스터</Option>
+          <Option value="manager">매니저</Option>
+          <Option value="customer">고객사</Option>
+          <Option value="consultant">상담원</Option>
+          <Option value="staff">스태프</Option>
+        </Select>
+      </Form.Item>
+
+      <Form.Item
+        name="useYn"
+        label="사용여부"
         rules={[{ required: true, message: 'Please select gender!' }]}
       >
-        <Select placeholder="select your gender">
-          <Option value="male">Male</Option>
-          <Option value="female">Female</Option>
-          <Option value="other">Other</Option>
-        </Select>
+        <RadioButton />
       </Form.Item>
 
       <Form.Item
