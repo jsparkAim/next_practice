@@ -1,14 +1,21 @@
 import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import { authConfig } from './auth.config';
-import { sql } from 'mysql2/promise';
+// import { sql } from 'mysql2/promise';
 import { z } from 'zod';
 import type { User } from '@/app/lib/definitions';
 import bcrypt from 'bcrypt';
 
 async function getUser(email: string): Promise<User | undefined> {
   try {
-    const user = await sql<User>`SELECT * from USERS where email=${email}`;
+    const {PrismaClient} = require('@prisma/client');
+    const prisma = new PrismaClient();
+    const user = await prisma.user.findUnique({
+      where: {
+        email: email,
+      },
+    });
+    // const user = await sql<User>`SELECT * from USERS where email=${email}`;
     return user.rows[0];
   } catch (error) {
     console.error('Failed to fetch user:', error);

@@ -15,6 +15,8 @@ import {
 } from 'antd';
 import RadioButton from '../../ui/join/RadioButton';
 import StartToEndDate from '../../ui/join/StartToEndDate';
+import type { RadioChangeEvent } from 'antd';
+import { Radio } from 'antd';
 
 const { Option } = Select;
 
@@ -147,7 +149,7 @@ const App: React.FC = () => {
       <Form.Item
         name="company"
         label="기업/부서"
-        rules={[{ required: true, message: 'Please input your nickname!', whitespace: true }]}
+        rules={[{ required: true, message: '기업/부서를 선택하세요.', whitespace: true }]}
       >
         <Select placeholder="기업/부서 선택" style={{width : '49%', marginRight : '2%'}}>
           <Option value="ai">에임메드</Option>
@@ -158,19 +160,17 @@ const App: React.FC = () => {
       </Form.Item>
 
       <Form.Item
-        name="name"
+        name="userName"
         label="이름"
-        tooltip="What do you want others to call you?"
-        rules={[{ required: true, message: 'Please input your nickname!', whitespace: true }]}
+        rules={[{ required: true, message: '이름을 입력하세요.', whitespace: true }]}
       >
         <Input />
       </Form.Item>
 
       <Form.Item
-        name="id"
+        name="userId"
         label="아이디"
-        tooltip="What do you want others to call you?"
-        rules={[{ required: true, message: 'Please input your nickname!', whitespace: true }]}
+        rules={[{ required: true, message: '아이디를 입력하세요.', whitespace: true }]}
       >
         <Input style={{width : '74%', marginRight : '5%'}} />
         <Button type="primary">중복확인</Button>
@@ -186,7 +186,7 @@ const App: React.FC = () => {
           },
           {
             required: true,
-            message: 'Please input your E-mail!',
+            message: '이메일을 입력하세요.',
           },
         ]}
       >
@@ -199,7 +199,7 @@ const App: React.FC = () => {
         rules={[
           {
             required: true,
-            message: 'Please input your password!',
+            message: '비밀번호를 입력하세요.',
           },
         ]}
         hasFeedback
@@ -207,34 +207,12 @@ const App: React.FC = () => {
         <Input.Password />
       </Form.Item>
 
-      {/* <Form.Item
-        name="confirm"
-        label="비밀번호 확인"
-        dependencies={['password']}
-        hasFeedback
-        rules={[
-          {
-            required: true,
-            message: 'Please confirm your password!',
-          },
-          ({ getFieldValue }) => ({
-            validator(_, value) {
-              if (!value || getFieldValue('password') === value) {
-                return Promise.resolve();
-              }
-              return Promise.reject(new Error('The new password that you entered do not match!'));
-            },
-          }),
-        ]}
-      >
-        <Input.Password />
-      </Form.Item> */}
-
       <Form.Item
         name="phone"
         label="휴대폰 번호"
         rules={[
           {
+            required: true,
             validator: valiedatPhoneNumber,
             message: "올바른 전화번호 양식이 아닙니다.",
           }
@@ -243,20 +221,25 @@ const App: React.FC = () => {
         <Input style={{ width: '100%' }}/>
       </Form.Item>
 
-      <Form.Item
-        name="joinDate"
-        label="가입일"
-        rules={[{ required: true, message: '가입일을 선택해주세요' }]}
-      >
-        <StartToEndDate />
-      </Form.Item>
+      
 
       <Form.Item
         name="usePeriod"
         label="사용기간 설정"
         rules={[{ required: true, message: '사용기간을 선택해주세요' }]}
       >
-        <RadioButton />
+       <Radio.Group >
+          <Radio value="N">N</Radio>
+          <Radio value="Y">Y</Radio>
+        </Radio.Group>
+      </Form.Item>
+
+      <Form.Item
+        name="useDate"
+        label="사용기간"
+        rules={[{ required: true, message: '사용기간을 선택해주세요' }]}
+      >
+        <StartToEndDate />
       </Form.Item>
 
 
@@ -297,10 +280,19 @@ const App: React.FC = () => {
       <Form.Item
         name="useYn"
         label="사용여부"
-        rules={[{ required: true, message: 'Please select gender!' }]}
+        rules={[{ required: true, message: '사용여부를 선택하세요' }]}
       >
-        <RadioButton />
+        {/* <RadioButton /> */}
+        <Radio.Group >
+          <Radio value="N">N</Radio>
+          <Radio value="Y">Y</Radio>
+        </Radio.Group>
+        
       </Form.Item>
+
+      <Button type="primary" htmlType="submit" style={{ float : 'right' }}>
+        등록
+      </Button>
 
       <Form.Item
         name="agreement"
@@ -313,13 +305,8 @@ const App: React.FC = () => {
         ]}
         {...tailFormItemLayout}
       >
-        
       </Form.Item>
-      <Form.Item {...tailFormItemLayout}>
-        <Button type="primary" htmlType="submit">
-          Register
-        </Button>
-      </Form.Item>
+      
     </Form>
   );
 };
