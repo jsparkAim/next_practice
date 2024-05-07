@@ -48,7 +48,7 @@ model sy_clco {
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model sy_clco_dept {
-  clco_no      BigInt
+  clco_no      BigInt  
   clco_dept_cd String   @db.VarChar(20)
   clco_dept_nm String   @db.VarChar(100)
   regr_no      BigInt

@@ -17,7 +17,6 @@ import RadioButton from '../../ui/join/RadioButton';
 import StartToEndDate from '../../ui/join/StartToEndDate';
 import type { RadioChangeEvent } from 'antd';
 import { Radio } from 'antd';
-import axios from 'axios';
 
 const { Option } = Select;
 
