@@ -15,7 +15,6 @@ async function getUser(email: string): Promise<User | undefined> {
         email: email,
       },
     });
-    // const user = await sql<User>`SELECT * from USERS where email=${email}`;
     return user.rows[0];
   } catch (error) {
     console.error('Failed to fetch user:', error);

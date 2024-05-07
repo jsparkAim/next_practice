@@ -17,6 +17,7 @@ import RadioButton from '../../ui/join/RadioButton';
 import StartToEndDate from '../../ui/join/StartToEndDate';
 import type { RadioChangeEvent } from 'antd';
 import { Radio } from 'antd';
+import axios from 'axios';
 
 const { Option } = Select;
 
@@ -90,10 +91,13 @@ const App: React.FC = () => {
 
   const onFinish = (values: any) => {
     console.log('Received values of form: ', values);
+    Object.keys(values).forEach(key => {
+      console.log("hello ," , key, ':', values[key]);
+    });
   };
 
   const prefixSelector = (
-    <Form.Item name="prefix" noStyle>
+    <Form.Item  noStyle>
       <Select style={{ width: 70 }}>
         <Option value="86">+86</Option>
         <Option value="87">+87</Option>
@@ -102,7 +106,7 @@ const App: React.FC = () => {
   );
 
   const suffixSelector = (
-    <Form.Item name="suffix" noStyle>
+    <Form.Item  noStyle>
       <Select style={{ width: 70 }}>
         <Option value="USD">$</Option>
         <Option value="CNY">¥</Option>
@@ -145,9 +149,9 @@ const App: React.FC = () => {
       initialValues={{ residence: ['zhejiang', 'hangzhou', 'xihu'], prefix: '86' }}
       style={{ maxWidth: 600 }}
       scrollToFirstError
+      action="/api/auth/users"
     >
       <Form.Item
-        name="company"
         label="기업/부서"
         rules={[{ required: true, message: '기업/부서를 선택하세요.', whitespace: true }]}
       >
@@ -160,7 +164,6 @@ const App: React.FC = () => {
       </Form.Item>
 
       <Form.Item
-        name="userName"
         label="이름"
         rules={[{ required: true, message: '이름을 입력하세요.', whitespace: true }]}
       >
@@ -168,7 +171,6 @@ const App: React.FC = () => {
       </Form.Item>
 
       <Form.Item
-        name="userId"
         label="아이디"
         rules={[{ required: true, message: '아이디를 입력하세요.', whitespace: true }]}
       >
@@ -177,7 +179,6 @@ const App: React.FC = () => {
       </Form.Item>
       
       <Form.Item
-        name="email"
         label="이메일"
         rules={[
           {
@@ -194,7 +195,6 @@ const App: React.FC = () => {
       </Form.Item>
 
       <Form.Item
-        name="password"
         label="비밀번호"
         rules={[
           {
@@ -208,7 +208,6 @@ const App: React.FC = () => {
       </Form.Item>
 
       <Form.Item
-        name="phone"
         label="휴대폰 번호"
         rules={[
           {
@@ -221,10 +220,7 @@ const App: React.FC = () => {
         <Input style={{ width: '100%' }}/>
       </Form.Item>
 
-      
-
       <Form.Item
-        name="usePeriod"
         label="사용기간 설정"
         rules={[{ required: true, message: '사용기간을 선택해주세요' }]}
       >
@@ -235,7 +231,6 @@ const App: React.FC = () => {
       </Form.Item>
 
       <Form.Item
-        name="useDate"
         label="사용기간"
         rules={[{ required: true, message: '사용기간을 선택해주세요' }]}
       >
@@ -244,7 +239,6 @@ const App: React.FC = () => {
 
 
       <Form.Item
-        name="authority"
         label="권한"
         rules={[{ required: true, message: '권한을 선택해주세요' }]}
       >
@@ -264,7 +258,6 @@ const App: React.FC = () => {
     
 
       <Form.Item
-        name="adminYn"
         label="관리자 구분"
         rules={[{ required: true, message: '관리자를 선택해주세요' }]}
       >
@@ -278,7 +271,6 @@ const App: React.FC = () => {
       </Form.Item>
 
       <Form.Item
-        name="useYn"
         label="사용여부"
         rules={[{ required: true, message: '사용여부를 선택하세요' }]}
       >
@@ -295,7 +287,6 @@ const App: React.FC = () => {
       </Button>
 
       <Form.Item
-        name="agreement"
         valuePropName="checked"
         rules={[
           {
@@ -306,7 +297,6 @@ const App: React.FC = () => {
         {...tailFormItemLayout}
       >
       </Form.Item>
-      
     </Form>
   );
 };

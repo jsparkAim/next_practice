@@ -8,7 +8,75 @@ datasource db {
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-model test {
-  id   Int     @id @default(autoincrement())
-  name String? @db.VarChar(100)
+model sv_srvc_gd {
+  gd_no                BigInt   @id @default(autoincrement())
+  clco_no              BigInt
+  expsr_tf             String   @db.Char(1)
+  gd_ttl               String   @db.VarChar(255)
+  expsr_end_dt_stng_tf String   @db.Char(1)
+  expsr_bgng_dt        DateTime @db.DateTime(0)
+  expsr_end_dt         DateTime @db.DateTime(0)
+  gd_cont              String   @db.Text
+  regr_no              BigInt
+  reg_dt               DateTime @db.DateTime(0)
+  modr_no              BigInt
+  mod_dt               DateTime @db.DateTime(0)
+
+  @@index([clco_no, expsr_end_dt], map: "sv_srvc_gd_ix01")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model sy_clco {
+  clco_no      BigInt   @id @default(autoincrement())
+  clco_nm      String   @db.VarChar(100)
+  clco_sctn_cd String?  @db.VarChar(12)
+  use_url      String?  @db.VarChar(255)
+  use_bgng_ymd DateTime @db.Date
+  use_end_ymd  DateTime @db.Date
+  use_stts_cd  String   @db.VarChar(20)
+  pic_nm       String?  @db.VarChar(100)
+  pic_dept_nm  String?  @db.VarChar(100)
+  pic_telno    String?  @db.VarChar(20)
+  b2b_type     String?  @db.VarChar(10)
+  comp_code    String?  @db.VarChar(100)
+  bot_code     String?  @db.VarChar(100)
+  regr_no      BigInt
+  reg_dt       DateTime @db.DateTime(0)
+  modr_no      BigInt
+  mod_dt       DateTime @db.DateTime(0)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model sy_clco_dept {
+  clco_no      BigInt
+  clco_dept_cd String   @db.VarChar(20)
+  clco_dept_nm String   @db.VarChar(100)
+  regr_no      BigInt
+  reg_dt       DateTime @db.DateTime(0)
+  modr_no      BigInt
+  mod_dt       DateTime @db.DateTime(0)
+
+  @@id([clco_no, clco_dept_cd])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model sy_mngr {
+  mngr_no      BigInt    @id @default(autoincrement())
+  mngr_id      String    @unique(map: "sy_mngr_ix01") @db.VarChar(128)
+  mngr_pswd    String    @db.VarChar(500)
+  mngr_nm      String    @db.VarChar(128)
+  mngr_sctn_cd String    @db.VarChar(20)
+  mngr_stts_cd String?   @db.VarChar(20)
+  email        String    @db.VarChar(255)
+  mbph_no      String    @db.VarChar(128)
+  use_tf       String    @db.Char(1)
+  clco_no      BigInt?
+  clco_dept_cd String?   @db.VarChar(20)
+  use_bgng_ymd DateTime? @db.Date
+  use_end_ymd  DateTime? @db.Date
+  fail_cnt     BigInt?   @default(0)
+  reg_dt       DateTime  @db.DateTime(0)
+  modr_no      BigInt
+  mod_dt       DateTime  @db.DateTime(0)
+  regr_no      BigInt
 }
