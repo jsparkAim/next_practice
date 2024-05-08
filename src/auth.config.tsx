@@ -1,4 +1,4 @@
-import type { NextAuthConfig } from 'next-auth';
+import { NextAuthConfig } from 'next-auth';
  
 export const authConfig = {
   providers: [],
@@ -11,7 +11,7 @@ export const authConfig = {
       const isLoggedIn = !!auth?.user;
       // 보호하고싶은 경로 설정
       // 여기서는 /login 을 제외한 모든 경로가 보호됨.
-      const isOnProtected = nextUrl.pathname.startsWith('/login');
+      const isOnProtected = nextUrl.pathname.startsWith('/');
       if (isOnProtected) {
         if (isLoggedIn) return true;
         return false; // '/login' 경로로 강제이동
