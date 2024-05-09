@@ -6,20 +6,28 @@ export const authConfig = {
     signIn: '/login',
   },
   callbacks: {
-    authorized({ auth, request: { nextUrl } }) { // middle ware를 통해 접근권한 부여받았는지 확인
-      // 유저 인증 확인
+    authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
-      // 보호하고싶은 경로 설정
-      // 여기서는 /login 을 제외한 모든 경로가 보호됨.
       const isOnProtected = nextUrl.pathname.startsWith('/');
       if (isOnProtected) {
         if (isLoggedIn) return true;
-        return false; // '/login' 경로로 강제이동
+        return false; // user가 아니면'/login' 경로로 강제이동
       } else if (isLoggedIn) {
         // 홈페이지로 이동
         return Response.redirect(new URL('/', nextUrl));
       }
       return true;
     },
+    async redirect({ url, baseUrl }) { // 로그인 시 홈으로 이동
+      if (url.startsWith("/"))  {
+        return `${baseUrl}${url}`
+      }
+      else if (new URL(url).origin === baseUrl) {
+        return baseUrl
+      } 
+      return baseUrl
+    }
   },
+  
+  
 } satisfies NextAuthConfig;
