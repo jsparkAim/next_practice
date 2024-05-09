@@ -7,13 +7,13 @@ export const authConfig = {
   },
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
-      const isLoggedIn = !!auth?.user;
+      const isLoggedIn = !!auth?.user; 
       const isOnProtected = nextUrl.pathname.startsWith('/');
       if (isOnProtected) {
         if (isLoggedIn) return true;
         return false; // user가 아니면'/login' 경로로 강제이동
       } else if (isLoggedIn) {
-        // 홈페이지로 이동
+        // 로그인 한 적이 있으면, home으로 이동
         return Response.redirect(new URL('/', nextUrl));
       }
       return true;
