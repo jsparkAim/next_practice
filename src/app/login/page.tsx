@@ -10,83 +10,81 @@ import {
   Row,
   Select,
 } from 'antd';
-import { signIn } from "../../auth";
 import bcrypt from 'bcrypt';
 import { useFormState, useFormStatus } from 'react-dom';
 import { authenticate } from '@/app/lib/actions';
-import { ArrowRightIcon } from '@heroicons/react/20/solid';
-import {Link, Route} from "react-router-dom";
-import { useActionState } from 'react';
-
-const [form] = Form.useForm()
+//import LoginButton from '../ui/login/LogoutButton'
 
 const LoginForm : React.FC = () => {
-  const onFinish = async (values: any) => {
-    // console.log('Received values of form: ', values); // key , value
-    try{
-       const result = await signIn('credentials', { 
-         id : values.id,
-         password : values.password
-         
-      });
-    } catch (error) {
-      console.error('Failed to sign in:', error);
-    } 
-  };
+  const [errorMessage, dispatch] = useFormState(authenticate, undefined);
+
 
   return (
-    <Form
-      form = {form}
-      name="normal_login"
-      className="login-form"
-      initialValues={{ remember: true }}
-      onFinish={onFinish}
-      style={{width: '50%'}}
-      
-    >
-      <Form.Item
-         name="company"
-         rules={[{ required: true, message: '기업을 선택하세요.' }]}
-      >
-        <Select placeholder="기업 선택">
-          <Select.Option value="1">SK HYNIX</Select.Option>
-          <Select.Option value="2">에임메드</Select.Option>
-        </Select>
-      </Form.Item>
-
-      <Form.Item
-        name="id"
-        rules={[{ required: true, message: '아이디를 입력하세요.' }]}
-      >
-        <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="아이디" />
-      </Form.Item>
-
-      <Form.Item
-        name="password"
-        rules={[{ required: true, message: '비밀번호를 입력하세요.' }]}
-      >
-        <Input
-          prefix={<LockOutlined className="site-form-item-icon" />}
-          type="password"
-          placeholder="비밀번호"
-        />
-      </Form.Item>
-
-      <Form.Item>
-        <Button type="primary" htmlType="submit" className="login-form-button">
-          로그인
-        </Button>
-        {/* <LoginButton /> */}
-        <a className="login-form-forgot" href="">
-          아이디 찾기
-        </a>
-        <span>|</span>
-        <a className="login-form-forgot" href="">
-           비밀번호 찾기
-        </a>
-      </Form.Item>
-    </Form>
+    <form action={dispatch} className="space-y-3">
+      <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
+        <h1 className={`mb-3 text-2xl`}>
+          Please log in to continue.
+        </h1>
+        <div className="w-full">
+          <div>
+            <label
+              className="mb-3 mt-5 block text-xs font-medium text-gray-900"
+              htmlFor="email"
+            >
+              Email
+            </label>
+            <div className="relative">
+              <input
+                className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
+                id="email"
+                name="email"
+                placeholder="Enter your email address"
+                required
+              />
+            </div>
+          </div>
+          <div className="mt-4">
+            <label
+              className="mb-3 mt-5 block text-xs font-medium text-gray-900"
+              htmlFor="password"
+            >
+              Password
+            </label>
+            <div className="relative">
+              <input
+                className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
+                id="password"
+                type="password"
+                name="password"
+                placeholder="Enter password"
+                required
+                minLength={6}
+              />
+            </div>
+          </div>
+        </div>
+        <LoginButton />
+        <div
+          className="flex h-8 items-end space-x-1"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          {errorMessage && (
+            <>
+              <p className="text-sm text-red-500">{errorMessage}</p>
+            </>
+          )}
+        </div>
+      </div>
+    </form>
   );
 };
-
+function LoginButton() {
+  const { pending } = useFormStatus();
+  return (
+    <Button htmlType="submit" disabled={pending}>
+      로그인
+    </Button>
+  );
+}
 export default LoginForm;
