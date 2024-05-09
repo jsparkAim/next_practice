@@ -1,22 +1,20 @@
 import NextAuth from 'next-auth';
-import Credentials from 'next-auth/providers/credentials';
 import { authConfig } from './auth.config';
-// import { sql } from 'mysql2/promise';
+import Credentials from 'next-auth/providers/credentials';
 import { z } from 'zod';
-import type { User } from '@/app/lib/definitions';
 import bcrypt from 'bcrypt';
-import CredentialsProvider from "next-auth/providers/credentials";
+import prisma from './app/lib/prisma';
 
-async function getUser(id: string): Promise<User | undefined> {
+
+async function getUser(mngrId: string): Promise<any | undefined> {
   try {
-    const {PrismaClient} = require('@prisma/client');
-    const prisma = new PrismaClient();
-    const user = await prisma.sy_mngr.findUnique({
+    const existMngr = await prisma.sy_mngr.findFirst({
       where: {
-        mngr_id: id,
+        mngr_id: mngrId,
       },
     });
-    return user;
+
+    return existMngr;
   } catch (error) {
     console.error('Failed to fetch user:', error);
     throw new Error('Failed to fetch user.');
@@ -26,22 +24,22 @@ async function getUser(id: string): Promise<User | undefined> {
 export const { auth, signIn, signOut } = NextAuth({
   ...authConfig,
   providers: [
-    CredentialsProvider({
-      async authorize(credentials, req) {
-        console.log(req)
-        console.log(credentials)
+    Credentials({
+      async authorize(credentials) {
         const parsedCredentials = z
-          .object({ id: z.string(), password: z.string().min(6) })
+          .object({ mngrId: z.string(), password: z.string().min(6) })
           .safeParse(credentials);
 
         if (parsedCredentials.success) {
-          const { id, password } = parsedCredentials.data;
-          const user = await getUser(id);
+          const { mngrId, password } = parsedCredentials.data;
+          const user = await getUser(mngrId);
           if (!user) return null;
-          const passwordsMatch = await bcrypt.compare(password, user.password);
-          if (passwordsMatch) return user;
+          const passwordsMatch = await bcrypt.compare(password, user.mngr_pswd);
+          if (passwordsMatch) {
+            return user;
+          }
         }
- 
+
         console.log('Invalid credentials');
         return null;
       },
