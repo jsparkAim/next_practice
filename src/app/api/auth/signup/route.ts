@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 import bcrypt from "bcrypt";
 import prisma from "@/app/lib/prisma";
 
-export async function POST(request: Request) {
+export async function POST(request: Request) { // 회원가입
   const info = await request.json();
   let pwd = info.mngr_pswd;
 
@@ -11,8 +11,9 @@ export async function POST(request: Request) {
 
   const now = dayjs().add(9, "hours").toISOString();
   const user = await prisma.sy_mngr.create({
-    data: { ...info, mngr_pswd: hash, reg_dt: now, mod_dt: now },
+    data: { ...info, mngr_pswd: hash, reg_dt: now, mod_dt: now, modr_no: 1, regr_no: 1, mngr_sctn_cd: "10"},
   });
+  console.log('user create result : ' + user)
   return Response.json({ res: user.email });
 }
 
