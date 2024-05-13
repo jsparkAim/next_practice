@@ -52,7 +52,7 @@ const getItems: MenuItem[] = [
     getItem('2-3', '8'),
   ]),
   getItem('기업관리자', '9', <UserOutlined />, [
-    getItem(<Link href={'/board/guide'}>서비스안내</Link>, '10'),
+    getItem(<Link href={'/service/guide'}>서비스안내</Link>, '10'),
     getItem('모바일 보건센터', '11'),
     getItem('프로젝트 회원관리', '12'),
   ]),

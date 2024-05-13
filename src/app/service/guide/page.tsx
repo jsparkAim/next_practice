@@ -11,9 +11,12 @@ import {
 import Datepicker from "react-tailwindcss-datepicker"; 
 import 'react-datepicker/dist/react-datepicker.css';
 import ko from 'date-fns/locale/ko';
+// import { Router } from 'next/router';
+import { useRouter } from "next/navigation";
 
 const App: React.FC = () => {
 
+  const router = useRouter();
   const [startDate, setStartDate] = useState(new Date());
 
   const [value, setValue] = useState({ 
@@ -25,6 +28,10 @@ const App: React.FC = () => {
     console.log("newValue:", newValue); 
     setValue(newValue); 
     } 
+
+    const register = async() => {
+      router.push('/service/guide/register')
+    }
 
  const TABLE_HEAD = ["Name", "Job", "Employed", ""];
   
@@ -57,6 +64,46 @@ const App: React.FC = () => {
  ];
   return (
    <>
+   <div>
+      <div className="flex flex-col">
+      <div className="overflow-x-auto">
+        <div className="p-1.5 w-full inline-block align-middle">
+          <div className="overflow-hidden border rounded-lg">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+              </thead>
+              <tbody className="divide-y divide-gray-200">
+                <tr>
+                  <td className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
+                    조회기간
+                  </td>
+                  <td className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
+                    2020
+                  </td>
+                </tr>
+                <tr>
+                  <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
+                    노출여부
+                  </td>
+                  <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
+                    N
+                  </td>
+                </tr>
+                <tr>
+                  <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
+                    검색어
+                  </td>
+                  <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
+                    검색어 입력하세요
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
     <div>
       <div className="flex flex-col">
       <div className="overflow-x-auto">
@@ -69,31 +116,31 @@ const App: React.FC = () => {
                     scope="col"
                     className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
                   >
-                    ID
+                    No.
                   </th>
                   <th
                     scope="col"
                     className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
                   >
-                    Name
+                    노출여부
                   </th>
                   <th
                     scope="col"
                     className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
                   >
-                    Email
+                    제목
                   </th>
                   <th
                     scope="col"
                     className="px-6 py-3 text-xs font-bold text-right text-gray-500 uppercase "
                   >
-                    Edit
+                    작성자
                   </th>
                   <th
                     scope="col"
                     className="px-6 py-3 text-xs font-bold text-right text-gray-500 uppercase "
                   >
-                    Delete
+                    등록일
                   </th>
                 </tr>
               </thead>
@@ -182,6 +229,9 @@ const App: React.FC = () => {
         </div>
       </div>
     </div>
+    <button onClick={ register } className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        등록
+    </button>
 		</div>
     </>
   );

@@ -2,7 +2,8 @@ import dayjs from "dayjs";
 import bcrypt from "bcrypt";
 import prisma from "@/app/lib/prisma";
 
-export async function POST(request: Request) { // 회원가입
+// 회원가입 
+export async function POST(request: Request) { 
   const info = await request.json();
   let pwd = info.mngr_pswd;
 

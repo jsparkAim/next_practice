@@ -1,7 +1,8 @@
 import prisma from "@/app/lib/prisma";
 import dayjs from "dayjs";
 
-export async function POST (request : Request) { // 부서 생성
+// 부서 생성
+export async function POST (request : Request) { 
     const rawData = await request.json();
 
     const now = dayjs().add(9, "hours").toISOString();
