@@ -39,24 +39,24 @@ const SignUp = () => {
     });
 
     const onSubmit = async (data: newUserType) => {
-      try {
-        console.log(data);
-        const response = await fetch('/api/auth/signup', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        });
-        if (response.ok) {
-            const responseData = await response.json();
-            console.log(responseData);
-        } else {
-            console.error('Error:', response.statusText);
+        try {
+            console.log(data);
+            const response = await fetch('/api/auth/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+            if (response.ok) {
+                const responseData = await response.json();
+                console.log(responseData);
+            } else {
+                console.error('Error:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error:', error);
         }
-    } catch (error) {
-        console.error('Error:', error);
-    }
     };
 
     return (

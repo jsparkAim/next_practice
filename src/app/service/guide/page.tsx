@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Card, Typography } from "@material-tailwind/react";
 import {
   RecoilRoot,
@@ -13,8 +13,29 @@ import 'react-datepicker/dist/react-datepicker.css';
 import ko from 'date-fns/locale/ko';
 // import { Router } from 'next/router';
 import { useRouter } from "next/navigation";
+import { get } from 'http';
 
 const App: React.FC = () => {
+
+  const [clco_no, setClcoNo] = useState([]);
+  
+
+  const getList = async () => {
+    try {
+      const res = await fetch('/api/serviceGuide/list');
+      const data = await res.json();
+      console.log("res : ", data);
+      setClcoNo(data.clco_no);
+    } catch (error) {
+      console.error("Failed to fetch data:", error);
+    }
+  }
+  
+  console.log(getList)
+
+  useEffect(() => {
+    getList();
+  }, []);
 
   const router = useRouter();
   const [startDate, setStartDate] = useState(new Date());
@@ -25,43 +46,15 @@ const App: React.FC = () => {
     }); 
     
     const handleValueChange = (newValue : any) => {
-    console.log("newValue:", newValue); 
-    setValue(newValue); 
+      setValue(newValue); 
     } 
 
+    // 등록페이지 이동
     const register = async() => {
       router.push('/service/guide/register')
     }
 
- const TABLE_HEAD = ["Name", "Job", "Employed", ""];
   
- const TABLE_ROWS = [
-   {
-     name: "John Michael",
-     job: "Manager",
-     date: "23/04/18",
-   },
-   {
-     name: "Alexa Liras",
-     job: "Developer",
-     date: "23/04/18",
-   },
-   {
-     name: "Laurent Perrier",
-     job: "Executive",
-     date: "19/09/17",
-   },
-   {
-     name: "Michael Levi",
-     job: "Developer",
-     date: "24/12/08",
-   },
-   {
-     name: "Richard Gran",
-     job: "Manager",
-     date: "04/10/21",
-   },
- ];
   return (
    <>
    <div>
@@ -145,85 +138,26 @@ const App: React.FC = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                <tr>
-                  <td className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
-                    1
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">Jone Doe</td>
-                  <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
-                    jonne62@gmail.com
-                  </td>
-                  <td className="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
-                    <a className="text-green-500 hover:text-green-700" href="#">
-                      Edit
-                    </a>
-                  </td>
-                  <td className="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
-                    <a className="text-red-500 hover:text-red-700" href="#">
-                      Delete
-                    </a>
-                  </td>
-                </tr>
-                <tr>
-                  <td className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
-                    2
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">Jone Doe</td>
-                  <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
-                    jonne62@gmail.com
-                  </td>
-                  <td className="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
-                    <a className="text-green-300 hover:text-green-700" href="#">
-                      Edit
-                    </a>
-                  </td>
-                  <td className="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
-                    <a className="text-red-500 hover:text-red-700" href="#">
-                      Delete
-                    </a>
-                  </td>
-                </tr>
-                <tr>
-                  <td className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
-                    3
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">Jone Doe</td>
-                  <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
-                    jonne62@gmail.com
-                  </td>
-                  <td className="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
-                    <a className="text-green-500 hover:text-green-700" href="#">
-                      Edit
-                    </a>
-                  </td>
-                  <td className="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
-                    <a className="text-red-500 hover:text-red-700" href="#">
-                      Delete
-                    </a>
-                  </td>
-                </tr>
-                <tr>
-                  <td className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
-                    4
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
-                    Mary Poppins
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
-                    marypoppins@gmail.com
-                  </td>
-                  <td className="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
-                    <a className="text-green-300 hover:text-green-700" href="#">
-                      Edit
-                    </a>
-                  </td>
-                  <td className="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
-                    <a className="text-red-500 hover:text-red-700" href="#">
-                      Delete
-                    </a>
-                  </td>
-                </tr>
-              </tbody>
+                    {/* {getList.map((item: any, index: number) => (
+                      <tr key={index}>
+                        <td className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
+                          {item.no}
+                        </td>
+                        <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
+                          {item.isVisible}
+                        </td>
+                        <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
+                          {item.title}
+                        </td>
+                        <td className="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
+                          {item.author}
+                        </td>
+                        <td className="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
+                          {item.registrationDate}
+                        </td>
+                      </tr>
+                    ))} */}
+                  </tbody>
             </table>
           </div>
         </div>
