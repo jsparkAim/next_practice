@@ -11,27 +11,31 @@ import {
 import Datepicker from "react-tailwindcss-datepicker"; 
 import 'react-datepicker/dist/react-datepicker.css';
 import ko from 'date-fns/locale/ko';
-// import { Router } from 'next/router';
 import { useRouter } from "next/navigation";
 import { get } from 'http';
+import Link from 'next/link';
 
 const App: React.FC = () => {
 
-  const [clco_no, setClcoNo] = useState([]);
-  
+  const [dataList, setDataList] = useState<any[]>([]);
 
   const getList = async () => {
     try {
       const res = await fetch('/api/serviceGuide/list');
       const data = await res.json();
-      console.log("res : ", data);
-      setClcoNo(data.clco_no);
+      
+      const gdTtlList = data.res.map((item: any) => ({
+        gd_ttl: item.gd_ttl,
+        expsr_tf: item.expsr_tf,
+        gd_no: item.gd_no,
+        regr_no: item.regr_no,
+        reg_dt: item.reg_dt.slice(0, 10)
+      }));
+      setDataList(gdTtlList);
     } catch (error) {
       console.error("Failed to fetch data:", error);
     }
   }
-  
-  console.log(getList)
 
   useEffect(() => {
     getList();
@@ -54,7 +58,6 @@ const App: React.FC = () => {
       router.push('/service/guide/register')
     }
 
-  
   return (
    <>
    <div>
@@ -138,25 +141,27 @@ const App: React.FC = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                    {/* {getList.map((item: any, index: number) => (
-                      <tr key={index}>
-                        <td className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
-                          {item.no}
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
-                          {item.isVisible}
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
-                          {item.title}
-                        </td>
-                        <td className="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
-                          {item.author}
-                        </td>
-                        <td className="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
-                          {item.registrationDate}
-                        </td>
-                      </tr>
-                    ))} */}
+                {dataList.map((item, index) => (
+                  <tr key={index}>
+                    <td className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
+                      {item.gd_no}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
+                      {item.expsr_tf}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
+                      <Link href={`/service/guide/getItem/${item.gd_no}`}>
+                        {item.gd_ttl}
+                      </Link>
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
+                      {item.regr_no}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
+                      {item.reg_dt}
+                    </td>
+                  </tr>
+                ))}
                   </tbody>
             </table>
           </div>
