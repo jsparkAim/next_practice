@@ -1,6 +1,7 @@
 import prisma from "@/app/lib/prisma";
 import { NextRequest, NextResponse } from 'next/server';
 
+// 서비스 안내 상세 페이지 조회
 export async function GET(request: NextRequest) {
     const itemId = request.url.split('/').pop();
     console.log('itemId:', itemId);
@@ -11,7 +12,6 @@ export async function GET(request: NextRequest) {
     });
 
     console.log('getResult >> ', getResult)
-
    const serializeResult = getResult ? {
        ...getResult,
        gd_no: String(getResult.gd_no),
