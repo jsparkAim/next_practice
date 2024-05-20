@@ -6,10 +6,11 @@ import 'react-quill/dist/quill.snow.css';
 interface QuillEditorProps {
     value: string;
     onChange: (value: string) => void;
+    readOnly: boolean;
 }
 
-const QuillEditor: React.FC<QuillEditorProps> = ({ value, onChange }) => {
-    return <ReactQuill theme="snow" value={value} onChange={onChange} />;
+const QuillEditor: React.FC<QuillEditorProps> = ({ value, onChange , readOnly }) => {
+    return <ReactQuill theme="snow" readOnly={readOnly} value={value} onChange={onChange} />;
 };
 
 export default QuillEditor;

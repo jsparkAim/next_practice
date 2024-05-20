@@ -17,8 +17,8 @@ type sg_createType = {
     expsr_tf: string;
     gd_ttl: string;
     expsr_end_dt_stng_tf: string;
-    expsr_bgng_dt: string;
-    expsr_end_dt: string;
+    expsr_bgng_dt: Date;
+    expsr_end_dt: Date;
 }
 
 export default function Layout() {
@@ -38,13 +38,12 @@ export default function Layout() {
         let formattedEndDateResult = null;
         if (expsr_bgng_dt) {
             const formattedStartDate = new Date(expsr_bgng_dt);
-            formattedStartDateResult = formattedStartDate.toISOString();
-            data.expsr_bgng_dt = formattedStartDateResult;
+            data.expsr_bgng_dt = formattedStartDate;
         }
         if (expsr_end_dt) {
             const formattedEndDate = new Date(expsr_end_dt);
-            formattedEndDateResult = formattedEndDate.toISOString();
-            data.expsr_end_dt = formattedEndDateResult;
+            //formattedEndDateResult = formattedEndDate.toISOString();
+            data.expsr_end_dt = formattedEndDate;
         }
         data.gd_cont = gd_cont;
         data.gd_ttl = gd_ttl;
@@ -89,26 +88,26 @@ export default function Layout() {
     }
 
     // 유효성 검증
-    // const schema = z.object({
-    //     clco_no : z.string(),
-    //     expsr_tf : z.string(), 
-    //     expsr_end_dt_stng_tf : z.string(),    
-    //     gd_ttl : z.string({ message: "제목을 입력해주세요." }),
-    //     expsr_bgng_dt : z.string().min(1),
-    //     expsr_end_dt : z.string().nullable(),
-    //     gd_cont : z.string({ message: "내용을 입력해주세요." })
-    // });
+    const schema = z.object({
+        clco_no : z.number().int(),
+        expsr_tf : z.string(), 
+        expsr_end_dt_stng_tf : z.string(),    
+        gd_ttl : z.string().min(1, { message: "제목을 입력해주세요." }),
+        expsr_bgng_dt : z.date(),
+        expsr_end_dt : z.date().nullable(),
+        gd_cont : z.string(),
+    });
 
     const { register, handleSubmit, formState: { errors } } = useForm({ 
-        //resolver: zodResolver(schema),
+        resolver: zodResolver(schema),
         defaultValues: {
-            clco_no : 1,
-            expsr_tf : '',
-            expsr_end_dt_stng_tf : '',
-            gd_ttl : '',
-            expsr_bgng_dt : '',
-            expsr_end_dt : '',
-            gd_cont : ''
+            clco_no: 1,
+            expsr_tf: 'Y',
+            expsr_end_dt_stng_tf: 'N',
+            gd_ttl: '',
+            expsr_bgng_dt: new Date(),
+            expsr_end_dt: null,
+            gd_cont: ''
         },
     });
 
@@ -164,9 +163,9 @@ export default function Layout() {
                                 </td>
                                 </tr>
                                 <tr>
-                                <td className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap bg-slate-300">
-                                    노출기간
-                                </td>
+                                    <td className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap bg-slate-300">
+                                        노출기간
+                                    </td>
                                     <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
                                         <div className="flex items-center">
                                             <input type="radio" {...register("expsr_end_dt_stng_tf")} value="Y" id="expsr_true" name="expsr_end_dt_stng_tf" className="" onChange={()=> setExpsrEndDtStngTf('Y')} checked={expsr_end_dt_stng_tf === 'Y'}/>
@@ -184,7 +183,7 @@ export default function Layout() {
                                             시작일 : 
                                             <DatePicker
                                                 selected={expsr_bgng_dt}
-                                                onChange={(date) => setExpsrBgngDt(date)}
+                                                onChange={(date) => setExpsrBgngDt(date as Date)}
                                                 showTimeSelect
                                                 dateFormat="Pp"
                                                 />
@@ -208,7 +207,7 @@ export default function Layout() {
                                     내용
                                 </td>
                                 <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
-                                    <QuillEditor value={gd_cont} onChange={handleQuillChange} />
+                                    <QuillEditor value={gd_cont} onChange={handleQuillChange} readOnly={false} />
                                 </td>
                                 </tr>
                                 <tr>
